@@ -1,5 +1,6 @@
 BASIC SETUP
 ----------------------------------
+
 1. Install XAMPP from https://www.apachefriends.org/download.html
 
 2. Start MySQL and Apache from the XAMP interface. To open the GUI for
@@ -34,6 +35,7 @@ printed on index.php
 
 CREATING A DATABASE
 -----------------------------------
+
 1. Follow the instruction on the following site to create a
 database. Let us call it "mydb"
   https://www.studentstutorial.com/php/how-to-create-table-in-phpmyadmin
@@ -50,15 +52,23 @@ CREATE TABLE `employee` (
 
 3. Confirm that phpmyadmin prints "MySQL returned an empty result set"
 
---- CRUD ---
---- Create Data ---
---- Read Data ---
---- Update Data ---
---- Delete Data ---
+
+CRUD AND THE MYSQLI API
+-----------------------------------
+
+Create data
+Read data
+Update data
+Delete data
+= CRUD
+
+MySQLi
+https://www.php.net/manual/pt_BR/book.mysqli.php
 
 
 INSERTING ROWS IN A TABLE (>C<RUD)
 -----------------------------------
+
 1. Create file database.php
 
 <?php
@@ -170,6 +180,101 @@ else{
  </body>
 </html>
 
+2. Open URL "http://localhost/test/retrieve.php"
+
 
 UPDATING ROWS FROM A TABLE (CR>U<D)
 -----------------------------------
+
+1. Create file update.php (similar to retrieve.php, but with a link to
+update each row)
+
+<?php
+include_once 'database.php';
+$result = mysqli_query($conn,"SELECT * FROM employee");
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+<title>Delete employee data</title>
+</head>
+<body>
+<table>
+<tr>
+<td>Employee Id</td>
+<td>First Name</td>
+<td>Last Name</td>
+<td>City</td>
+<td>Email id</td>
+<td>Action</td>
+</tr>
+<?php
+$i=0;
+while($row = mysqli_fetch_array($result)) {
+if($i%2==0)
+$classname="even";
+else
+$classname="odd";
+?>
+<tr class="<?php if(isset($classname)) echo $classname;?>">
+<td><?php echo $row["userid"]; ?></td>
+<td><?php echo $row["first_name"]; ?></td>
+<td><?php echo $row["last_name"]; ?></td>
+<td><?php echo $row["city_name"]; ?></td>
+<td><?php echo $row["email"]; ?></td>
+<td><a href="update-process.php?userid=<?php echo $row["userid"]; ?>">Update</a></td>
+</tr>
+<?php
+$i++;
+}
+?>
+</table>
+</body>
+</html>
+
+2. Create file update-process.php
+
+<?php
+include_once 'database.php';
+if(count($_POST)>0) {
+mysqli_query($conn,"UPDATE employee set userid='" . $_POST['userid'] . "', first_name='" . $_POST['first_name'] . "', last_name='" . $_POST['last_name'] . "', city_name='" . $_POST['city_name'] . "' ,email='" . $_POST['email'] . "' WHERE userid='" . $_POST['userid'] . "'");
+$message = "Record Modified Successfully";
+}
+$result = mysqli_query($conn,"SELECT * FROM employee WHERE userid='" . $_GET['userid'] . "'");
+$row= mysqli_fetch_array($result);
+?>
+<html>
+<head>
+<title>Update Employee Data</title>
+</head>
+<body>
+<form name="frmUser" method="post" action="">
+<div><?php if(isset($message)) { echo $message; } ?>
+</div>
+<div style="padding-bottom:5px;">
+<a href="retrieve.php">Employee List</a>
+</div>
+Username: <br>
+<input type="hidden" name="userid" class="txtField" value="<?php echo $row['userid']; ?>">
+<input type="text" name="userid"  value="<?php echo $row['userid']; ?>">
+<br>
+First Name: <br>
+<input type="text" name="first_name" class="txtField" value="<?php echo $row['first_name']; ?>">
+<br>
+Last Name :<br>
+<input type="text" name="last_name" class="txtField" value="<?php echo $row['last_name']; ?>">
+<br>
+City:<br>
+<input type="text" name="city_name" class="txtField" value="<?php echo $row['city_name']; ?>">
+<br>
+Email:<br>
+<input type="text" name="email" class="txtField" value="<?php echo $row['email']; ?>">
+<br>
+<input type="submit" name="submit" value="Submit" class="buttom">
+
+</form>
+</body>
+</html>
+
+3. Open URL "http://localhost/test/update.php"
