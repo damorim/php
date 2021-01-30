@@ -11,4 +11,4 @@ day 3 [symfony](https://symfony.com/)
 
 day 4 **symfony+app**
 
-day 5 **app**
+day 5 **app+test+deployment**
