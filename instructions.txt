@@ -32,6 +32,14 @@ and add a print statement (in php) within that tag.
 8. access http://localhost/test and verify you can see the string you
 printed on index.php
 
+9. Install the brackets IDE from "http://brackets.io/". brackets is a
+minimalist IDE for HTML/CSS/PHP/JS. It helps you edit/test/debug your
+php files. After sucessfully installing the software (there is a
+button in the page for the installer), open it. The following command
+opens the IDE in Linux.
+
+  $> brackets -i --no-sandbox
+
 
 CREATING A DATABASE
 -----------------------------------
@@ -278,3 +286,6 @@ Email:<br>
 </html>
 
 3. Open URL "http://localhost/test/update.php"
+
+DELETING ROWS FROM A TABLE (CRU>D<)
+-----------------------------------
