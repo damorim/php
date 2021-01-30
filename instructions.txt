@@ -1,0 +1,159 @@
+BASIC SETUP
+----------------------------------
+1. Install XAMPP from https://www.apachefriends.org/download.html
+
+2. Start MySQL and Apache
+  Obs. If Apache is already running (not through xampp), stop it with
+  $> /etc/init.d/apache2 stop
+
+3. Create the following symbolic link (Apache2 directory where php files resides)
+  $> ln -s /opt/lampp/htdocs/ .
+
+4. cd into that directory
+
+5. create directory "test"
+
+6. change the owner
+  $> sudo chown -R $USER test
+
+7. create an index.php file (with a <?php ...> tag) on that directory
+
+8. access http://localhost/test
+-----------------------------------
+
+CREATING A DATABASE
+-----------------------------------
+1. Follow the instruction on the following site to create a
+database. Let us call it "mydb"
+  https://www.studentstutorial.com/php/how-to-create-table-in-phpmyadmin
+
+2. Execute the following SQL code under the SQL table of this database
+
+CREATE TABLE `employee` (
+	`userid` int(8) PRIMARY KEY AUTO_INCREMENT,
+	`first_name` varchar(55) NOT NULL,
+	`last_name` varchar(55) NOT NULL,
+	`city_name` varchar(55) NOT NULL,
+	`email` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+3. Confirm that phpmyadmin prints "MySQL returned an empty result set"
+
+--- CRUD ---
+--- Create Data ---
+--- Read Data ---
+--- Update Data ---
+--- Delete Data ---
+
+
+INSERTING ROWS TO A TABLE
+-----------------------------------
+1. Create file database.php
+
+<?php
+$servername='localhost';
+$username='root';
+$password='';
+$dbname = "mydb";
+$conn=mysqli_connect($servername,$username,$password,"$dbname");
+if(!$conn){
+   die('Could not Connect My Sql:' .mysql_error());
+}
+?>
+
+2. Create file insert.php
+
+<!DOCTYPE html>
+<html>
+  <body>
+	<form method="post" action="process.php">
+		First name:<br>
+		<input type="text" name="first_name">
+		<br>
+		Last name:<br>
+		<input type="text" name="last_name">
+		<br>
+		City name:<br>
+		<input type="text" name="city_name">
+		<br>
+		Email Id:<br>
+		<input type="email" name="email">
+		<br><br>
+		<input type="submit" name="save" value="submit">
+	</form>
+  </body>
+</html>
+
+3. Create file process.php
+
+<?php
+include_once 'database.php';
+if(isset($_POST['save']))
+{	 
+	 $first_name = $_POST['first_name'];
+	 $last_name = $_POST['last_name'];
+	 $city_name = $_POST['city_name'];
+	 $email = $_POST['email'];
+	 $sql = "INSERT INTO employee (first_name,last_name,city_name,email)
+	 VALUES ('$first_name','$last_name','$city_name','$email')";
+	 if (mysqli_query($conn, $sql)) {
+		echo "New record created successfully !";
+	 } else {
+		echo "Error: " . $sql . "
+" . mysqli_error($conn);
+	 }
+	 mysqli_close($conn);
+}
+?>
+
+4. Open URL "http://localhost/test/insert.php"
+
+SELECTING ROWS FROM A TABLE
+-----------------------------------
+
+1. Create file retrieve.php
+
+<?php
+include_once 'database.php';
+$result = mysqli_query($conn,"SELECT * FROM employee");
+?>
+<!DOCTYPE html>
+<html>
+ <head>
+ <title> Retrive data</title>
+ </head>
+<body>
+<?php
+if (mysqli_num_rows($result) > 0) {
+?>
+  <table>
+  
+  <tr>
+    <td>First Name</td>
+    <td>Last Name</td>
+    <td>City</td>
+    <td>Email id</td>
+  </tr>
+<?php
+$i=0;
+while($row = mysqli_fetch_array($result)) {
+?>
+<tr>
+    <td><?php echo $row["first_name"]; ?></td>
+    <td><?php echo $row["last_name"]; ?></td>
+    <td><?php echo $row["city_name"]; ?></td>
+    <td><?php echo $row["email"]; ?></td>
+</tr>
+<?php
+$i++;
+}
+?>
+</table>
+ <?php
+}
+else{
+    echo "No result found";
+}
+?>
+ </body>
+</html>
