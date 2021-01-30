@@ -2,9 +2,18 @@ BASIC SETUP
 ----------------------------------
 1. Install XAMPP from https://www.apachefriends.org/download.html
 
-2. Start MySQL and Apache
-  Obs. If Apache is already running (not through xampp), stop it with
-  $> /etc/init.d/apache2 stop
+2. Start MySQL and Apache from the XAMP interface. To open the GUI for
+the XAMPP interface on Linux, type the command below:
+
+  $> sudo /opt/lampp/manager-linux-x64.run
+
+  Obs. Access "http://localhost". You must see a page with the title
+  "XAMPP Apache + MariaDB + PHP + Perl".
+
+  Obs. If you can't start Apache, it is certainly because you are
+  already running it on your machine (not through xampp). To stop it
+  on Linux, type the command $> /etc/init.d/apache2 stop. After that,
+  return to the XAMP admin interface and try to start Apache.
 
 3. Create the following symbolic link (Apache2 directory where php files resides)
   $> ln -s /opt/lampp/htdocs/ .
@@ -13,13 +22,15 @@ BASIC SETUP
 
 5. create directory "test"
 
-6. change the owner
+6. change the owner of the directory
   $> sudo chown -R $USER test
 
 7. create an index.php file (with a <?php ...> tag) on that directory
+and add a print statement (in php) within that tag.
 
-8. access http://localhost/test
------------------------------------
+8. access http://localhost/test and verify you can see the string you
+printed on index.php
+
 
 CREATING A DATABASE
 -----------------------------------
@@ -46,7 +57,7 @@ CREATE TABLE `employee` (
 --- Delete Data ---
 
 
-INSERTING ROWS TO A TABLE
+INSERTING ROWS IN A TABLE (>C<RUD)
 -----------------------------------
 1. Create file database.php
 
@@ -108,7 +119,8 @@ if(isset($_POST['save']))
 
 4. Open URL "http://localhost/test/insert.php"
 
-SELECTING ROWS FROM A TABLE
+
+SELECTING ROWS FROM A TABLE (C>R<UD)
 -----------------------------------
 
 1. Create file retrieve.php
@@ -157,3 +169,7 @@ else{
 ?>
  </body>
 </html>
+
+
+UPDATING ROWS FROM A TABLE (CR>U<D)
+-----------------------------------
