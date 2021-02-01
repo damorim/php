@@ -1,6 +1,6 @@
 # php
 
-day 1 **overview**: configuration (xampp:apache+mysql), php basics, CRUD
+day 1 **overview**: php basics, CRUD, configuration (xampp:apache+mysql)
 
 day 2 **more in detail**: php and mysqli
 
