@@ -1,0 +1,86 @@
+We will create a simple blog application in this tutorial.
+
+SETUP
+----------------------------------
+
+1. Install symfony. Follow the instructions on
+https://symfony.com/download.
+
+  * Note that you need to make symfony accessible
+
+2. Make sure symfony is accessible
+
+  * On Unix:
+
+      path with php ----v            v------ path with symfony
+  $> export PATH="/opt/lampp/bin/:$HOME/.symfony/bin:$PATH"
+  $> symfony --help
+
+3. Check if the installation was successful
+
+  $>  symfony check:requirements
+
+4. Install composer, which is the PHP package manager (PHP refers to
+packages as bundles). Follow the link below for instructions on how to
+install composer.
+
+  https://getcomposer.org/download/
+
+5. Create an alias to facilitate invocation of composer
+
+  $> alias composer='php ~/.symfony/composer/composer.phar'
+
+6. Check if installation was successfull
+
+  $> composer
+
+  # without alias
+  $> php ~/.symfony/composer/composer.phar
+
+  Obs. You can create an alias to call this command just "composer"
+
+7. Create a dummy project to demonstrate basic symfony commands.
+
+  # --full instructs symfony/composer to install packages
+  # most web apps will need
+  $> symfony new dummy_project --full
+
+  $> cd dummy_project
+
+  # shows basic configuration info (e.g., version of PHP and Symfony)
+  $> php bin/console about
+
+  # start the server of your application
+  $> symfony server:start
+
+  # install a package for logging (just for fun)
+  $> composer require logger
+
+  # check for security vulnerabilities in bundles
+  # List of security vulnerabilities --> https://github.com/FriendsOfPHP/security-advisories
+  $> symfony check:security
+
+  # delete the dummy project
+  # cd ../ ; rm -rf dummy_project
+
+CREATE APP FROM SKELETON
+----------------------------------
+
+1. Create the skeleton of our blog app
+
+  $> composer create-project symfony/skeleton blog
+
+2. cd into the directory
+
+  $> cd blog
+
+3. Install the following dependencies
+
+  $> composer require symfony/orm-pack annotations validator template security-bundle
+  $> composer require --dev maker-bundle
+
+4. Check security
+
+  $> symfony check:security
+
+------TODO: UPDATE DOTENV FILE -----
