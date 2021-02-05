@@ -1,4 +1,4 @@
-BASIC SETUP
+SETUP
 ----------------------------------
 
 1. Install XAMPP from https://www.apachefriends.org/download.html
