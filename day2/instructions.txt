@@ -158,22 +158,46 @@ This is a template of an HTML page that inherits from a base template
 and uses variable message, which is passed from a function that uses
 this template.
 
-2. Open "src/Controller/HelloController.php" and add the following
-annotation and function:
+2. Add the following definition to the
+ "src/Controller/HelloController.php" controller:
+   
+    /**
+     * @Route("/twig1/{msg}", name="twig1")
+     */
+    public function hello_twig($msg): Response
+    {
+        return $this->render('hello/index.html.twig', [ "message" =>  msg ]);
+    }
 
-/**
- * @Route("/twig", name="twig")
- */
-public function helloTwig(): Response
-{
-  $message = "Hello from Twig";
-  return $this->render('hello/index.html.twig', ["message" => $message]);
-}
+This block creates a new route and uses the "hello/index.html.twig"
+template (under the templates directory). Nothing fancy. It does a
+find-replace on variable "message" in the template with the
+corresponding contents, passed through a dictionary in render
+function.
 
-This block creates a new route and uses the index.html.twig template
-(under templates directory). Note that it does a find replace on 
-variable "$message".
+3. Access the URL http://127.0.0.1:8000/twig1/hello
 
-3. Type the following URL on the browser:
+4. The definition above passes a parameter through a route. This is
+fine, but not very common. Here is an alternative to that. Add the
+following definition to the "src/Controller/HelloController.php"
+controller:
 
-  http://127.0.0.1:8000/twig
+// add this import before the class definition
+use Symfony\Component\HttpFoundation\Request;
+    
+    /**
+     * @Route("/twig2", name="twig2")
+     */
+    public function hello_twig2(Request $request): Response
+    {
+        $message = $request->query->get('msg');
+        return $this->render('hello/index.html.twig', [ "message" => $message ]);
+    }   
+
+
+5. Access the URL http://127.0.0.1:8000/twig2?msg="hello"
+
+Note that the syntax is different. In particular, you name the
+parameter you are passing.
+
+  
