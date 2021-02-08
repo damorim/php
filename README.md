@@ -1,6 +1,6 @@
 # php
 
-day 1 **overview**: php basics, CRUD, configuration (xampp:apache+mysql), example CRUD app
+day 1 **overview**: configuration (xampp:apache+mysql), php basics, CRUD, example CRUD app
 
 day 2 [symfony](https://symfony.com/)
  * mvc architecture
