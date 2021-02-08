@@ -11,8 +11,10 @@ day 2
  * mvc architecture
  * tool configuration (symfony and composer) 
  * directory structure of symfony app
- * first app
- * templating
+ * creating app from console
+ * routes
+ * passing parameters
+ * templating 
  
 day 3 
  * ORM (doctrine) 
