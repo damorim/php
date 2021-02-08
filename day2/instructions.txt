@@ -100,8 +100,32 @@ CREATE A CONTROLLER USING THE CONSOLE
   Obs. Note that two files were created (.php and .twig). Make a guess
   on what they do.
 
-2. Open file "src/Controller/HelloController.php". Brief explanation
-on the slides.
+2. Open file "src/Controller/HelloController.php" and update contents to the following:
+
+<?php
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class HelloController extends AbstractController
+{
+    /**
+     * @Route("/hello", name="hello_route")
+     */
+    public function hello_function(): Response
+    {
+        return new Response(
+            'Olá turma da EMPREL', 
+            Response::HTTP_OK , 
+            ['content-type' => 'text/plain']);
+    }
+}
+
+  * Only route and function name have changed
+  ** Brief explanation on the slides.
 
 
 RUN THE SYMFONY WEBSERVER
