@@ -22,21 +22,6 @@ https://symfony.com/download.
   $>  symfony check:requirements
 
 
-Structure of a Symfony project:
-
-bin             # symfony console
-composer.json
-composer.lock
-config          # configuration files
-.env            # environment variables
-.gitigore       # files to ignore if you want to add this dir to VC
-public          # web files
-src             # source files
-symfony.lock
-var
-vendor          # dependencies 
-
-
 INSTALL COMPOSER
 ----------------------------------
 
@@ -72,11 +57,27 @@ BOOTSTRAP SYMFONY APP AND ADD BUNDLES TO IT
 
   Obs. You could have used composer to bootstrap and app from existing
   skeletons. For example, "$> composer create-project symfony/skeleton
-  blog"
-
+  blog" 
+  
 2. cd into the directory
 
   $> cd symfirst
+  
+***********************************
+Structure of a Symfony project:
+
+bin             # symfony console
+composer.json
+composer.lock
+config          # configuration files
+.env            # environment variables
+.gitigore       # files to ignore if you want to add this dir to VC
+public          # web files
+src             # source files
+symfony.lock
+var
+vendor          # dependencies 
+***********************************
 
 3. Install the following dependencies
 
