@@ -110,13 +110,45 @@ RUN THE SYMFONY WEBSERVER
 
   $> symfony serve
 
-
 2. Try to access the webserver. Type the following URL on the browser:
 
   http://127.0.0.1:8000/hello
 
 
+USING TEMPLATES (twig bundle)
+-------------------------------------------
 
+1. Change the contents of file "templates/hello/index.html.twig" to
+the following:
 
+{% extends 'base.html.twig' %}
 
+{% block title %}Plain message{% endblock %}
 
+{% block body %}
+    {{ message }}
+{% endblock %}
+
+This is a template of an HTML page that inherits from a base template
+and uses variable message, which is passed from a function that uses
+this template.
+
+2. Open "src/Controller/HelloController.php" and add the following
+annotation and function:
+
+/**
+ * @Route("/twig", name="twig")
+ */
+public function helloTwig(): Response
+{
+  $message = "Hello from Twig";
+  return $this->render('hello/index.html.twig', ["message" => $message]);
+}
+
+This block creates a new route and uses the index.html.twig template
+(under templates directory). Note that it does a find replace on 
+variable "$message".
+
+3. Type the following URL on the browser:
+
+  http://127.0.0.1:8000/twig
