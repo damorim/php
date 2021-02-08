@@ -51,7 +51,7 @@ install composer.
 BOOTSTRAP SYMFONY APP AND ADD BUNDLES TO IT
 -------------------------------------------
 
-1. Create the skeleton of our blog app
+1. Create the skeleton of our "hello world" app
 
   $> symfony new symfirst
 
