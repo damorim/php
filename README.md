@@ -10,7 +10,7 @@ day 1
 day 2 
  * mvc architecture
  * tool configuration (symfony and composer) 
- * directory structure
+ * directory structure of symfony app
  * first app
  * templating
  
