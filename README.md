@@ -1,7 +1,7 @@
 # php
 
 day 1 
- * tool configuration (xampp:php+apache+mysql)
+ * tool configuration (xampp: php+apache+mysql)
  * php basics
  * CRUD
  * phpAdmin (mydb and employee table)
