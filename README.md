@@ -4,7 +4,7 @@ day 1
  * tool configuration (xampp: php+apache+mysql)
  * php basics
  * CRUD
- * phpAdmin (mydb and employee table)
+ * phpAdmin
  * example CRUD app
 
 day 2 
