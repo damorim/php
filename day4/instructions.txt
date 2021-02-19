@@ -1,0 +1,93 @@
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+CREATE DATABASE
+----------------------------------------
+
+1. Open file .env and locate the following line:
+
+###> doctrine/doctrine-bundle ###
+DATABASE_URL=mysql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}
+###< doctrine/doctrine-bundle ###
+
+Change the parameters as you find necessary. For example:
+
+DATABASE_URL="mysql://root:@127.0.0.1:3306/blog_db?serverVersion=5.7"
+
+  * Doctrine is the name of bundle for handling the Object-Relational
+    Mapping (ORM).
+
+2. Create a database for the blog application using the Symfony
+console and doctrine plugin.
+
+  $> php bin/console doctrine:database:create
+
+  * You could have done this step from the phpAdmin interface. This
+    step was used to facilitate the process.
+
+
+CREATE BLOG CONTROLLER
+----------------------------------------
+
+1. Install the Symfony webserver bundle with the following command:
+
+  $> composer require symfony/web-server-bundle --dev
+  ^<VERSION_NUMBER>
+
+ , where <VERSION_NUMBER> denotes the most recent version of the
+ bundle. Check the following URL for that.
+
+https://packagist.org/packages/symfony/web-server-bundle
+
+
+2. Run the following command and when it asks for the class name
+mention BlogController.
+
+  $> php bin/console make:controller
+
+
+3. Open the file src/Controllers/BlogControler.php and replace the
+index function with the following function:
+
+
+/**
+ * @Route("/", name="homepage")
+ */
+public function indexAction()
+{
+    return $this->render('blog/index.html.twig', [
+        'controller_name' => 'BlogController',
+    ]);
+}
+
+
+4. Spawn the webserver from the Symfony console
+
+
+  $> php bin/console server:run
+
+
+
+4. Create a dummy project to demonstrate basic symfony commands.
+
+  # --full instructs symfony/composer to install packages
+  # most web apps will need
+  $> symfony new dummy_project --full
+
+  $> cd dummy_project
+
+  # shows basic configuration info (e.g., version of PHP and Symfony)
+  $> php bin/console about
+
+  # start the server of your application
+  $> symfony server:start
+
+  # install a package for logging (just for fun)
+  $> composer require logger
+
+  # check for security vulnerabilities in bundles
+  # List of security vulnerabilities --> https://github.com/FriendsOfPHP/security-advisories
+  $> symfony check:security
+
+  # delete the dummy project
+  # cd ../ ; rm -rf dummy_project
+

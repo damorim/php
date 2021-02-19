@@ -1,93 +1,75 @@
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Doctrine is an Object-Relational Mapping (ORM) Python component
+supporting a variety of databases.
 
-CREATE DATABASE
+SETUP
 ----------------------------------------
 
-1. Open file .env and locate the following line:
+Restore configurations from previous lesson, making sure that you can
+run symfony and composer from the command line. On Unix:
 
-###> doctrine/doctrine-bundle ###
-DATABASE_URL=mysql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}
-###< doctrine/doctrine-bundle ###
+$> export PATH="/opt/lampp/bin/:$HOME/.symfony/bin:$PATH"
+$> alias composer='php ~/.symfony/composer/composer.phar'
 
-Change the parameters as you find necessary. For example:
+CREATE NEW PROJECT AND ADD DOCTRINE
+----------------------------------------
 
-DATABASE_URL="mysql://root:@127.0.0.1:3306/blog_db?serverVersion=5.7"
+$> symfony new doctrine_example      # create new project
+$> cd doctrine_example
+$> composer require symfony/orm-pack # add doctrine dependency (to interface with db using objects)
+$> composer require --dev symfony/maker-bundle # add maker (to help generate code)
 
-  * Doctrine is the name of bundle for handling the Object-Relational
-    Mapping (ORM).
+CHECK IF LAMPP IS UP AND RUNNING
+----------------------------------------
 
-2. Create a database for the blog application using the Symfony
-console and doctrine plugin.
+$> sudo /opt/lampp/manager-linux-x64.run
+
+If you can't start lampp, it is probably because some part of it is
+already running (perhaps on a different port). Follow these
+instructions:
+
+https://stackoverflow.com/questions/40480843/xampp-another-web-server-is-already-running/44378479
+
+
+CONFIGURING A DATABASE
+----------------------------------------
+
+1. Modify .env file
+
+Your file should contain the following string:
+
+  DATABASE_URL="mysql://root:@127.0.0.1:3306/mydb_day3?serverVersion=5.7"
+
+, which indicates that use the db_user="root", db_password="", and
+db_name="mydb_day3" in the following template string:
+
+  DATABASE_URL="mysql://root:@localhost/mydb_day3?serverVersion=5.7"
+
+IMPORTANT: Make sure that line is not repeated!
+
+
+2. Create the database with doctrine
 
   $> php bin/console doctrine:database:create
 
-  * You could have done this step from the phpAdmin interface. This
-    step was used to facilitate the process.
+It should print "Created database `mydb_day3` for connection named
+default"
+
+3. Localize the database from the lampp dashboard:
+  http://localhost/phpmyadmin/
 
 
-CREATE BLOG CONTROLLER
+
+
+
+
+
+ACCESS PHPADMIN DASHBOARD
 ----------------------------------------
 
-1. Install the Symfony webserver bundle with the following command:
+1. Access URL http://localhost/dashboard/
+2. Locate database mydb
+3. Locate table employee
 
-  $> composer require symfony/web-server-bundle --dev
-  ^<VERSION_NUMBER>
+In case you don't have such a db or table, check lesson 1.
 
- , where <VERSION_NUMBER> denotes the most recent version of the
- bundle. Check the following URL for that.
-
-https://packagist.org/packages/symfony/web-server-bundle
-
-
-2. Run the following command and when it asks for the class name
-mention BlogController.
-
-  $> php bin/console make:controller
-
-
-3. Open the file src/Controllers/BlogControler.php and replace the
-index function with the following function:
-
-
-/**
- * @Route("/", name="homepage")
- */
-public function indexAction()
-{
-    return $this->render('blog/index.html.twig', [
-        'controller_name' => 'BlogController',
-    ]);
-}
-
-
-4. Spawn the webserver from the Symfony console
-
-
-  $> php bin/console server:run
-
-
-
-4. Create a dummy project to demonstrate basic symfony commands.
-
-  # --full instructs symfony/composer to install packages
-  # most web apps will need
-  $> symfony new dummy_project --full
-
-  $> cd dummy_project
-
-  # shows basic configuration info (e.g., version of PHP and Symfony)
-  $> php bin/console about
-
-  # start the server of your application
-  $> symfony server:start
-
-  # install a package for logging (just for fun)
-  $> composer require logger
-
-  # check for security vulnerabilities in bundles
-  # List of security vulnerabilities --> https://github.com/FriendsOfPHP/security-advisories
-  $> symfony check:security
-
-  # delete the dummy project
-  # cd ../ ; rm -rf dummy_project
 
