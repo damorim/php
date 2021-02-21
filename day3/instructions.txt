@@ -1,3 +1,5 @@
+Reference: https://symfony.com/doc/current/doctrine.html
+
 Doctrine is an Object-Relational Mapping (ORM) Python component
 supporting a variety of databases.
 
@@ -29,22 +31,23 @@ instructions:
 
 https://stackoverflow.com/questions/40480843/xampp-another-web-server-is-already-running/44378479
 
-
-CONFIGURING A DATABASE
+CONFIGURE AND CREATE A DATABASE
 ----------------------------------------
 
 1. Modify .env file
 
 Your file should contain the following string:
 
-  DATABASE_URL="mysql://root:@127.0.0.1:3306/mydb_day3?serverVersion=5.7"
+  DATABASE_URL="mysql://root:@127.0.0.1:3306/mydb_day3?serverVersion=10.4.17-MariaDB"
 
-, which indicates that use the db_user="root", db_password="", and
-db_name="mydb_day3" in the following template string:
+, which indicates that use the db_user="root", db_password="", 
+db_name="mydb_day3", and db_version="10.4.17-MariaDB" in the following template string:
 
-  DATABASE_URL="mysql://root:@localhost/mydb_day3?serverVersion=5.7"
+  DATABASE_URL="mysql://db_user:db_password@localhost/db_name?serverVersion=db_version"
 
-IMPORTANT: Make sure that line is not repeated!
+IMPORTANT:
+  - Make sure that line is not repeated!
+  - Find db_version on http://localhost/phpmyadmin (home buttom)
 
 
 2. Create the database with doctrine
@@ -57,19 +60,60 @@ default"
 3. Localize the database from the lampp dashboard:
   http://localhost/phpmyadmin/
 
-
-
-
-
-
-
-ACCESS PHPADMIN DASHBOARD
+CREATE AN ENTITY CLASS
 ----------------------------------------
 
-1. Access URL http://localhost/dashboard/
-2. Locate database mydb
-3. Locate table employee
+An entity is an element that can be manipulated programatically, but
+has a persistent representation in a database. 
 
-In case you don't have such a db or table, check lesson 1.
+1. Execute the following command to create an entity named Product. 
 
+  $> php bin/console make:entity
+
+You will be ask for information about the attributes of your entity
+class. Define you class with two fields: name and price.
+
+  name, string (255), non-null
+  price, integer, non-null
+
+You now have a src/Entity/Product.php file!
+
+2. Use the following command to create the database corresponding to
+your entity classes.
+
+  $>  php bin/console make:migration
+
+IMPORTANT: Follow the secondary instructions that will produce an
+effect on the database.
+
+3. Access the phpmyadmin webpage (http://localhost/phpmyadmin/) and
+confirm that the table was created in our mydb_day3 database
+
+UPDATING THE ENTITY CLASS
+----------------------------------------
+
+Approach 1: Open the .php file, add fields programmatically, and call
+the migration script (above)
+
+Approach 2: Call the make:entity script as if there was no entity and
+add the new field. The entity will be updated.
+
+Let's proceed with the second approach to add a field description to
+the product.
+
+1. Same script as before (to update the php entity class):
+
+  $> php bin/console make:entity
+
+  description, text, non-null
+
+2. Same script as before (to update the database schema):
+
+  $> php bin/console make:migration
+
+Obs. If you prefer to make changes to the schema, it is fine. But
+then you need to run the following command to have your changes
+consitent with the entity class:
+
+  $> php bin/console make:entity --regenerate
 
