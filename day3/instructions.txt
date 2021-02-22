@@ -1,7 +1,8 @@
 Reference: https://symfony.com/doc/current/doctrine.html
 
 Doctrine is an Object-Relational Mapping (ORM) Python component
-supporting a variety of databases.
+supporting a variety of databases. In this lesson, we will see how to
+use Doctrine to manage data.
 
 SETUP
 ----------------------------------------
@@ -19,6 +20,9 @@ $> symfony new doctrine_example      # create new project
 $> cd doctrine_example
 $> composer require symfony/orm-pack # add doctrine dependency (to interface with db using objects)
 $> composer require --dev symfony/maker-bundle # add maker (to help generate code)
+
+IMPORTANT: All commands from here on should be executed from inside
+directory doctrine_example.
 
 CHECK IF LAMPP IS UP AND RUNNING
 ----------------------------------------
@@ -116,4 +120,60 @@ then you need to run the following command to have your changes
 consitent with the entity class:
 
   $> php bin/console make:entity --regenerate
+
+PERSIST OBJECT TO THE DATABASE
+----------------------------------------
+
+Let us see how object data can be persisted to the database.
+
+1. Create the controller
+
+  $> php bin/console make:controller ProductController
+
+2. Replace the index() method, containing annotation setting route
+("/Product"), with the following method definition. This method
+creates a Product object and persists that object to the database.
+
+    /**
+     * @Route("/product", name="create_product")
+     */
+    public function createProduct(): Response
+    {
+        // you can fetch the EntityManager via $this->getDoctrine()
+        // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $product = new Product();
+        $product->setName('Keyboard');
+        $product->setPrice(1999);
+        $product->setDescription('Ergonomic and stylish!');
+
+        // tell Doctrine you want to (eventually) save the Product (no queries yet)
+        $entityManager->persist($product);
+
+        // actually executes the queries (i.e. the INSERT query)
+        $entityManager->flush();
+
+        return new Response('Saved new product with id '.$product->getId());
+    }    
+
+
+3. Check if class Product is imported. If not, add the following line
+under the namespace declaration.
+
+  use App\Entity\Product;
+
+4. Spawn the webserver
+
+  $> symfony serve
+
+5. Access the controller from the route
+
+  http://localhost:8000/product
+
+
+6. Check if the data was really persisted at the database.
+
+  # queries the database associated with this project
+  $> php bin/console dbal:run-sql 'SELECT * FROM product'
 
