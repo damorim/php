@@ -61,6 +61,10 @@ IMPORTANT:
 It should print "Created database `mydb_day3` for connection named
 default"
 
+  Obs. Uncomment line "pdo_mysql" in file php.ini at the php folder
+  (created by xampp or when php is installed).
+
+
 3. Localize the database from the lampp dashboard:
   http://localhost/phpmyadmin/
 
