@@ -1,93 +1,148 @@
-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Reference: https://symfony.com/doc/current/doctrine.html
 
-CREATE DATABASE
+Doctrine is an Object-Relational Mapping (ORM) Python component
+supporting a variety of databases. In this lesson, we will see how to
+use Doctrine to manage data.
+
+SETUP
 ----------------------------------------
 
-1. Open file .env and locate the following line:
+Restore configurations from previous lesson, making sure that you can
+run symfony and composer from the command line. On Unix:
 
-###> doctrine/doctrine-bundle ###
-DATABASE_URL=mysql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}:{DATABASE_PORT}/{DATABASE_NAME}
-###< doctrine/doctrine-bundle ###
+$> export PATH="/opt/lampp/bin/:$HOME/.symfony/bin:$PATH"
+$> alias composer='php ~/.symfony/composer/composer.phar'
 
-Change the parameters as you find necessary. For example:
-
-DATABASE_URL="mysql://root:@127.0.0.1:3306/blog_db?serverVersion=5.7"
-
-  * Doctrine is the name of bundle for handling the Object-Relational
-    Mapping (ORM).
-
-2. Create a database for the blog application using the Symfony
-console and doctrine plugin.
-
-  $> php bin/console doctrine:database:create
-
-  * You could have done this step from the phpAdmin interface. This
-    step was used to facilitate the process.
-
-
-CREATE BLOG CONTROLLER
+CHECK IF LAMPP IS UP AND RUNNING
 ----------------------------------------
 
-1. Install the Symfony webserver bundle with the following command:
+$> sudo /opt/lampp/manager-linux-x64.run
 
-  $> composer require symfony/web-server-bundle --dev
-  ^<VERSION_NUMBER>
+If you can't start lampp, it is probably because some part of it is
+already running (perhaps on a different port). Follow these
+instructions:
 
- , where <VERSION_NUMBER> denotes the most recent version of the
- bundle. Check the following URL for that.
+https://stackoverflow.com/questions/40480843/xampp-another-web-server-is-already-running/44378479
 
-https://packagist.org/packages/symfony/web-server-bundle
+LOCATE THE CODE YOU WROTE ON THE PREVIOUS LESSON
+------------------------------------------------
+
+Find the code you wrote in the previous lesson and open it in the IDE
+of your preference.
+
+EXPOSE YOUR CONTROLLER
+----------------------------------------
+
+Recall that the previous lesson used Doctrine's ORM to model the
+Product Entity, whose data is modeled in a database table.
+
+1. Use the following command to expose the controller. The controller
+implemented creates and saves a new produc to the database.
+
+  # from within the project directory
+  $> symfony serve 
+
+2. Access the controller from the route
+
+  http://localhost:8000/product/bananapacovan/5/fruta
+
+MODIFY YOUR CONTROLLER TO SHOW ONE PRODUCT
+------------------------------------------
+
+    /**
+     * @Route("/product/{id}", name="product_show")
+     */
+    public function show(int $id): Response
+    {
+        $product = $this->getDoctrine()
+            ->getRepository(Product::class)
+            ->find($id);
+
+        if (!$product) {
+            throw $this->createNotFoundException(
+                'No product found for id '.$id
+            );
+        }
+
+        return new Response('Check out this great product: '.$product->getName());
+
+        // or render a template
+        // in the template, print things with {{ product.name }}
+        // return $this->render('product/show.html.twig', ['product' => $product]);
+    } 
 
 
-2. Run the following command and when it asks for the class name
-mention BlogController.
+PLAY WITH HELPER METHODS OF THE REPOSITORY OBJECT
+-------------------------------------------------
 
-  $> php bin/console make:controller
+findOneBy: accepts a dictionary mapping field names to valued to be
+used as search criteria. It returns one element of the repo.
 
+findBy: same as above, but it returns a list of objects.
 
-3. Open the file src/Controllers/BlogControler.php and replace the
-index function with the following function:
-
-
-/**
- * @Route("/", name="homepage")
- */
-public function indexAction()
-{
-    return $this->render('blog/index.html.twig', [
-        'controller_name' => 'BlogController',
-    ]);
-}
+findAll: Returns all objects in the repository.
 
 
-4. Spawn the webserver from the Symfony console
+EXERCISE 1: Write a function that uses (1) findAll and (2) a twig
+template to list all available products on the system.
+
+EXERCISE 2: You can write custom SQL queries and add to your
+repository class (created when you ran make:entity). Look at the
+following URL to see example functions and write a function in your
+controller to invoke that function from your repo.
+
+https://symfony.com/doc/current/doctrine.html#querying-for-objects-the-repository
 
 
-  $> php bin/console server:run
+UPDATING OBJECTS
+----------------
+
+Updating the object can be done by (1) finding the entity object on
+its repository (as in the step above), (2) updating the entity object
+with setXXX() functions, and (3) flushing modifications to the
+database.
+
+    /**
+     * @Route("/product/edit/{id}")
+     */
+    public function update(int $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $product = $entityManager->getRepository(Product::class)->find($id);
+
+        ## Error message if product can't be located
+        if (!$product) {
+            throw $this->createNotFoundException(
+                'No product found for id '.$id
+            );
+        }
+
+        #TODO: new list of attributes could be provided as request object
+        $product->setName('New product name!'); 
+        $entityManager->flush();
+
+        ## Redirect the request to the corresponding route.
+        return $this->redirectToRoute('product_show', [
+            'id' => $product->getId()
+        ]);
+    }
+
+DELETING OBJECTS
+----------------
+
+Deleting object requires finding the object in the repository and
+requesting the entity manager to remove it (from the repo). As usual,
+do not forget to flush results to update the database.
 
 
-
-4. Create a dummy project to demonstrate basic symfony commands.
-
-  # --full instructs symfony/composer to install packages
-  # most web apps will need
-  $> symfony new dummy_project --full
-
-  $> cd dummy_project
-
-  # shows basic configuration info (e.g., version of PHP and Symfony)
-  $> php bin/console about
-
-  # start the server of your application
-  $> symfony server:start
-
-  # install a package for logging (just for fun)
-  $> composer require logger
-
-  # check for security vulnerabilities in bundles
-  # List of security vulnerabilities --> https://github.com/FriendsOfPHP/security-advisories
-  $> symfony check:security
-
-  # delete the dummy project
-  # cd ../ ; rm -rf dummy_project
-
+    /**
+     * @Route("/product/delete/{id}")
+     */
+    public function delete(int $id): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $product = $entityManager->getRepository(Product::class)->find($id);
+        $entityManager->remove($product);
+        $entityManager->flush();
+        return new Response('Product with id '.$product->getId().'deleted');
+    }
