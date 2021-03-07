@@ -21,7 +21,7 @@ day 3
  * ORM (Doctrine) 
  * Doctrine: Create
  
-day 4 **a complete app**
+day 4 
  * Doctrine: Read
  * Doctrine: Update
  * Doctrine: Delete
