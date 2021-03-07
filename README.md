@@ -18,9 +18,12 @@ day 2
  * templating 
  
 day 3 
- * ORM (doctrine) 
- * authentication
+ * ORM (Doctrine) 
+ * Doctrine: Create
  
 day 4 **a complete app**
+ * Doctrine: Read
+ * Doctrine: Update
+ * Doctrine: Delete
 
 day 5 **testing and deployment**
