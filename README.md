@@ -25,4 +25,10 @@ day 4
  * Doctrine: Update
  * Doctrine: Delete
 
-day 5 **testing and deployment**
+day 5 
+  * Forms 
+  * AJAX
+
+day 6 
+  * testing 
+  * deployment
