@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# run "$> source s" to load these variables in the shell
-
-export PATH="/opt/lampp/bin/:$HOME/.symfony/bin:$PATH"
-alias composer='php ~/.symfony/composer/composer.phar'
