@@ -1,0 +1,156 @@
+In this lesson we will learn how to produce lists and how to handle
+Forms in Symfony.
+
+SETUP
+----------------------------------------
+
+- See instructions on previous lessons and make sure you can access
+lampp, symfony, and compose.
+
+- Install the module for handling forms
+
+  $> composer require symfony/form
+
+- Create a student entity with fields title (string 3), name (string
+  255), and email (string 30).
+
+- Create a controller for the entity
+
+  $> php bin/console make:controller StudentController
+
+
+CREATE LIST VIEWS
+----------------------------------------
+
+1. Access the repository object of you entity (Student, in this case)
+and produce a list of objects.
+
+2. Use the render method of the controller. Pass a twig and the list
+as argument to the method.
+
+return $this->render('student/students.html.twig', [ 'list' => list ]);
+
+3. Iterate through this list in the template to create one item per
+element of the list.
+
+Obs. You can create the CSS of your preference to improve the
+look-and-feel, but that is the essence of the idea.
+
+
+CREATE A FORM PROGRAMMATICALLY
+----------------------------------------
+
+1. Replace the student controller with the following
+
+namespace App\Controller;
+
+use App\Entity\Student;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormBuilderInterface;
+
+class StudentController extends AbstractController
+{
+    /**
+     * @Route("/student", name="student")
+     */
+    public function index(): Response
+    {
+
+        ## build your object
+        $studentinfo = new Student();
+        $studentinfo->setTitle("Mr");
+        $studentinfo->setName("Pedro");
+        $studentinfo->setEmail("fake@gmail.com");
+
+        # create a form with contents from the object
+        $form = $this->createFormBuilder($studentinfo)
+            ->add('title', TextType::class)
+            ->add('name', TextType::class)
+            ->add('email', TextType::class, ['label' => 'Create Task'])
+            ->getForm();
+
+        # render it in a twig template
+        return $this->render('student/form_student.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+}
+
+2. Spawn the service
+
+$> symfony serve
+
+
+CREATE AND SAVE ROUTE
+--------------------------------------------
+
+It is considered good practice to use the same route to show and save
+entities. When the route is accessed via GET, the objective is to
+present the data. When the data is acessed via POST--through the click
+of a save button--the objective is to persist the data in the
+database. Check the following modification in the route.
+
+
+    /**
+     * @Route("/student", name="student")
+     */
+    public function showAndSave(Request $request): Response
+    {
+
+        ## build your object (hardcoded in this example)
+        $studentinfo = new Student();
+        $studentinfo->setTitle("Mr");
+        $studentinfo->setName("Pedro");
+        $studentinfo->setEmail("fake@gmail.com");
+
+        # create a form with contents from the object
+        $form = $this->createFormBuilder($studentinfo)
+            ->add('title', TextType::class)
+            ->add('name', TextType::class)
+            ->add('email', TextType::class)
+            ->add('save', SubmitType::class,  ['label' => 'Save'])
+            ->getForm();
+
+        # this will not have an effect in first request (via get)
+        $form->handleRequest($request);
+        if ($form->isSubmitted()/* && $form->isValid()*/) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $studentData = $form->getData();
+
+            // ... perform some action, such as saving the task to the database
+            // for example, if Task is a Doctrine entity, save it!
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($studentData);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('student_success');
+        }
+
+        # render it in a twig template
+        return $this->render('student/form_student.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/success", name="student_success")
+     */
+    public function success(): Response
+    {
+        return $this->render('base.html.twig', []);
+    }
+
+
+TASK
+--------------------------------------------
+
+The code above does **not** show the entity object when first
+invoked. Modify the code to pass the id of the student object as
+parameter, retrieve the entity from the database, and present it.
