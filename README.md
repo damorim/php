@@ -1,7 +1,7 @@
-# php
+# PHP
 
 day 1 
- * tool configuration (xampp: php+apache+mysql)
+ * tool configuration (xampp: php + apache + mysql)
  * php basics
  * CRUD
  * phpAdmin
@@ -29,5 +29,5 @@ day 5
   * Forms 
 
 day 6
-  * AJAX
-  * testing 
+  * AJAX (jQuery)
+  * testing (with PHP Unit)
