@@ -140,7 +140,11 @@ write code that manipulates the UI.
 
 * Assuming you have Google Chrome installed
 
-3. Execute the following code snippet
+3. Execute the chromedriver in the background:
+
+ $> chromedriver --port=444
+
+4. Execute the following code snippet
 
 ==================== drive.php
 <?php
