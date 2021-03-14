@@ -65,13 +65,13 @@ class StudentController extends AbstractController
         $studentinfo = new Student();
         $studentinfo->setTitle("Mr");
         $studentinfo->setName("Pedro");
-        $studentinfo->setEmail("fake@gmail.com");
+        $studentinfo->setEmail("fake@gmail.com");               
 
         # create a form with contents from the object
         $form = $this->createFormBuilder($studentinfo)
             ->add('title', TextType::class)
             ->add('name', TextType::class)
-            ->add('email', TextType::class, ['label' => 'Create Task'])
+            ->add('email', TextType::class)
             ->getForm();
 
         # render it in a twig template

@@ -18,17 +18,16 @@ day 2
  
 day 3 
  * ORM (Doctrine) 
- * Doctrine: Create
+ * Doctrine: Create (Crud)
  
 day 4 
- * Doctrine: Read
- * Doctrine: Update
- * Doctrine: Delete
+ * Doctrine: Read (cRud)
+ * Doctrine: Update (crUd)
+ * Doctrine: Delete (cruD)
 
 day 5 
   * Forms 
-  * AJAX
 
-day 6 
+day 6
+  * AJAX
   * testing 
-  * deployment
