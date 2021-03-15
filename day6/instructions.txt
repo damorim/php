@@ -38,7 +38,7 @@ of the page captures the submission. That handler is associated with
 the login form.
 
 The most important part of the code is the $.ajax method call. That
-method accepts a JSON descring a request to the server. The parameter
+method accepts a JSON describing a request to the server. The parameter
 "type" indicates they type of the HTTP request, the parameter "url"
 indicates the address relative to this page, the parameter "data"
 indicates what data is to be sent to the server (in this case, all the
@@ -124,8 +124,16 @@ At this point, you have been presented with the basic material for
 developing web applications in PHP. We will not see how to test it.
 
 Selenium is the (very popular) tool to test web applications. It is
-not a test framework. It is a library for controlling the
+not a test framework (as PHPUnit). It is a library for controlling the
 browser. That library is used in test frameworks.
+
+                                          User 
+                                           ^
+                                           |
+    Script                                 v
+   Selenium  <---->  WebDriver   <---->  Browser  <---> App
+    (Test)         (ChromeDriver)       (Chrome)
+   
 
 Setup
 
@@ -142,9 +150,9 @@ write code that manipulates the UI.
 
 3. Execute the chromedriver in the background:
 
- $> chromedriver --port=444
+ $> chromedriver --port=4444
 
-4. Execute the following code snippet
+4. Add the following file 
 
 ==================== drive.php
 <?php
@@ -174,3 +182,7 @@ $historyButton = $driver->findElement(
 echo 'About to click to a button with text: ' . $historyButton->getText();
 // Click the element to navigate to revision history page
 $historyButton->click();
+
+5. Execute the following command:
+
+  $> php drive.php
